@@ -1,4 +1,3 @@
-
 //
 //  MarqueeLabel.h
 //  
@@ -12,6 +11,10 @@ typedef enum {
     MLContinuous,           // Continuously scrolls left (with a pause at the original position if animationDelay is set)
     MLContinuousReverse     // Continuously scrolls right (with a pause at the original position if animationDelay is set)
 } MarqueeType;
+
+extern NSString *const kMarqueeLabelViewDidAppearNotification;
+extern NSString *const kMarqueeLabelShouldLabelizeNotification;
+extern NSString *const kMarqueeLabelShouldAnimateNotification;
 
 @interface MarqueeLabel : UILabel
 
@@ -27,7 +30,7 @@ typedef enum {
  *
  * Default is UIViewAnimationOptionCurveEaseInOut.
  */
-@property (nonatomic, assign) UIViewAnimationOptions animationCurve;
+@property(nonatomic, assign) UIViewAnimationOptions animationCurve;
 
 
 /* awayFromHome:
@@ -36,7 +39,7 @@ typedef enum {
  * in that "home" is offset by those in order for the edge of the labels not to be
  * faded when at the home location.
  */
-@property (nonatomic, assign, readonly) BOOL awayFromHome;
+@property(nonatomic, assign, readonly) BOOL awayFromHome;
 
 
 /* labelize:
@@ -44,7 +47,7 @@ typedef enum {
  * Defaults to NO.
  * See also: holdScrolling
  */
-@property (nonatomic, assign) BOOL labelize;
+@property(nonatomic, assign) BOOL labelize;
 
 
 /* holdScrolling:
@@ -54,7 +57,7 @@ typedef enum {
  * Defaults to NO.
  * See also: labelize
  */
-@property (nonatomic, assign) BOOL holdScrolling;
+@property(nonatomic, assign) BOOL holdScrolling;
 
 
 /* marqueeType:
@@ -74,7 +77,7 @@ typedef enum {
  *
  * Defaults to LeftRight.
  */
-@property (nonatomic, assign) MarqueeType marqueeType;
+@property(nonatomic, assign) MarqueeType marqueeType;
 
 
 /* continuousMarqueeExtraBuffer:
@@ -83,20 +86,20 @@ typedef enum {
  * by adjusting this value.
  * Defaults to 0.0;
  */
-@property (nonatomic, assign) CGFloat continuousMarqueeExtraBuffer;
+@property(nonatomic, assign) CGFloat continuousMarqueeExtraBuffer;
 
 
 /* fadeLength:
  * Sets the length of fade (from alpha 1.0 to alpha 0.0) at the edges of the
  * MarqueeLabel. Cannot be larger than 1/2 of the frame width (will be santized).
  */
-@property (nonatomic, assign) CGFloat fadeLength;
+@property(nonatomic, assign) CGFloat fadeLength;
 
 
 /* animationDelay:
  * Sets how long the label pauses at the "origin" position between scrolling
  */
-@property (nonatomic, assign) CGFloat animationDelay;
+@property(nonatomic, assign) CGFloat animationDelay;
 
 
 /* tapToScroll:
@@ -104,20 +107,25 @@ typedef enum {
  * NOTE: The label will not automatically scroll if this is set to YES!
  * Defaults to NO.
  */
-@property (nonatomic, assign) BOOL tapToScroll;
+@property(nonatomic, assign) BOOL tapToScroll;
+
+@property(nonatomic, assign) CGFloat rate;
 
 
 // Read-only properties for state
-@property (nonatomic, assign, readonly) BOOL isPaused;
+@property(nonatomic, assign, readonly) BOOL isPaused;
 
 
 // Class Methods
 + (void)controllerViewAppearing:(UIViewController *)controller;
+
 + (void)controllerLabelsShouldLabelize:(UIViewController *)controller;
+
 + (void)controllerLabelsShouldAnimate:(UIViewController *)controller;
 
 // Methods
 - (id)initWithFrame:(CGRect)frame rate:(CGFloat)pixelsPerSec andFadeLength:(CGFloat)fadeLength;
+
 - (id)initWithFrame:(CGRect)frame duration:(NSTimeInterval)lengthOfScroll andFadeLength:(CGFloat)fadeLength;
 
 /* Use this method to resize a MarqueeLabel to the minimum possible size, accounting
@@ -127,9 +135,11 @@ typedef enum {
 - (void)minimizeLabelFrameWithMaximumSize:(CGSize)maxSize adjustHeight:(BOOL)adjustHeight;
 
 - (void)restartLabel;
+
 - (void)resetLabel;
 
 - (void)pauseLabel;
+
 - (void)unpauseLabel;
 
 @end
